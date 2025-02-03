@@ -1,3 +1,21 @@
+"use strict";
+const mainInput = document.querySelector("#input");
+const addTodoBtn = document.querySelector("#add-todo-btn");
+const listContainer = document.querySelector(".list-container");
+
+addTodoBtn.addEventListener("click", () => {
+  const newTodo = mainInput.value;
+
+  if (newTodo.length === 0) {
+    alert("please add text to add new todo!");
+    mainInput.focus();
+    return;
+  }
+
+  addTodo(newTodo);
+  mainInput.value = "";
+});
+
 function getContrastColor(hex) {
   // Convert hex to RGB
   let r = parseInt(hex.substring(1, 3), 16);
@@ -12,8 +30,8 @@ function getContrastColor(hex) {
 }
 
 function changeCardColor(cardSelector, colorPicker) {
-  let card = document.querySelector(cardSelector);
-  let cardText = document.querySelector(`${cardSelector}>P`);
+  let card = document.getElementById(cardSelector);
+  let cardText = document.querySelector(`#${cardSelector}>P`);
   if (card && cardText) {
     card.style.backgroundColor = colorPicker.value;
     cardText.style.color = getContrastColor(colorPicker.value);
@@ -21,7 +39,43 @@ function changeCardColor(cardSelector, colorPicker) {
   }
 }
 
-// Example usage: Change card color when user selects a new color
-document.querySelector(".color-input").addEventListener("input", function () {
-  changeCardColor("#card-1", this);
-});
+const handleCardColor = (cardSelector, colorInputEl) => {
+  changeCardColor(cardSelector, colorInputEl);
+};
+
+const addListenerToColorInputs = () => {
+  const colorInputs = document.querySelectorAll(".color-input");
+
+  colorInputs.forEach((input) => {
+    const cardId = input.parentElement.parentElement.parentElement.id;
+    input.addEventListener("input", () => {
+      handleCardColor(cardId, input);
+    });
+  });
+};
+
+document.addEventListener("DOMContentLoaded", () => addListenerToColorInputs);
+
+const getUniqueId = () => {
+  return Date.now();
+};
+
+const addTodo = (data) => {
+  const newListItem = document.createElement("li");
+  newListItem.className = "list-item";
+  newListItem.id = `card-${getUniqueId()}`;
+  newListItem.innerHTML = `<p class="item-text">${data}</p>
+        <div class="list-button-group">
+        <div title="Change card color">
+                <input type="color" class="color-input" value="#fedd00" />
+                </div>
+            <div>
+            <button class="btn edit-btn">Edit</button>
+                <button class="btn delete-btn">Delete</button>
+            </div>
+        </div>
+        `;
+
+  listContainer.appendChild(newListItem);
+  addListenerToColorInputs();
+};
