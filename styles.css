@@ -1,0 +1,128 @@
+:root {
+  --primary-bg: #1d1d1d;
+  --primary-text: #000;
+  --btn-text: #fff;
+  --primary-blue: #007fff;
+  --delete-btn: #b00;
+  --card-bg: #fedd00;
+  --btn-group-bg: #d1d1d1;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.bg-container {
+  padding: 5rem;
+  background-color: #1d1d1d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+.header {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+.h1 {
+  color: var(--btn-text);
+  margin-bottom: 2rem;
+}
+
+.main-input-container {
+  display: flex;
+}
+.input {
+  width: 70%;
+  border: none;
+  outline: none;
+  padding: 1rem;
+  font-size: 1.3rem;
+  border-radius: 8px;
+}
+.btn {
+  border: none;
+  outline: none;
+  padding: 0.5rem 1rem;
+  font-size: 1.3rem;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+#add-todo-btn {
+  margin-left: 1rem;
+  background-color: var(--primary-blue);
+  color: var(--btn-text);
+}
+
+.main-container {
+  width: 80%;
+  height: 80%;
+  position: relative;
+  overflow: auto;
+  -ms-overflow-style: none;
+}
+
+.main-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.main-container::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.7);
+  border-radius: 10px;
+}
+
+.list-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5rem;
+}
+.list-item {
+  min-width: 20%;
+  max-width: 45%;
+  background-color: var(--card-bg);
+  min-height: 14rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.item-text {
+  padding: 1rem;
+  color: var(--primary-text);
+  font-size: 1.5rem;
+  font-weight: 600;
+  width: 70%;
+}
+.list-button-group {
+  padding: 0.5rem 1rem;
+  background-color: var(--btn-group-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.7rem;
+}
+.color-input {
+  border-radius: 26rem;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.color-input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.edit-btn {
+  background-color: var(--primary-blue);
+}
+.delete-btn {
+  background-color: var(--delete-btn);
+}
