@@ -16,6 +16,7 @@ addTodoBtn.addEventListener("click", () => {
 
   addTodo(newTodo);
   mainInput.value = "";
+  mainInput.style.height = "40px";
 });
 
 function getContrastColor(hex) {
@@ -57,6 +58,18 @@ const addListenerToColorInputs = () => {
     });
   });
 };
+
+function autoResize(textarea) {
+  textarea.style.height = "40px";
+  const newHeight = Math.min(textarea.scrollHeight, 150);
+  textarea.style.height = `${newHeight}px`;
+}
+
+document.addEventListener("input", function (event) {
+  if (event.target.tagName.toLowerCase() === "textarea") {
+    autoResize(event.target);
+  }
+});
 
 document.addEventListener("DOMContentLoaded", () => addListenerToColorInputs);
 
