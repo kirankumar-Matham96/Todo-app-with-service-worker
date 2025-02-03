@@ -3,6 +3,8 @@ const mainInput = document.querySelector("#input");
 const addTodoBtn = document.querySelector("#add-todo-btn");
 const listContainer = document.querySelector(".list-container");
 
+let todoList = [];
+
 addTodoBtn.addEventListener("click", () => {
   const newTodo = mainInput.value;
 
@@ -34,6 +36,8 @@ function changeCardColor(cardSelector, colorPicker) {
   let cardText = document.querySelector(`#${cardSelector}>P`);
   if (card && cardText) {
     card.style.backgroundColor = colorPicker.value;
+    const itemFound = todoList.find((todo) => todo.id === cardSelector);
+    itemFound.bgColor = colorPicker.value;
     cardText.style.color = getContrastColor(colorPicker.value);
     card.style.transition = "all 0.3s ease";
   }
@@ -60,22 +64,53 @@ const getUniqueId = () => {
   return Date.now();
 };
 
-const addTodo = (data) => {
+const deleteTodo = (cardId) => {
+  todoList = todoList.filter((todo) => {
+    if (todo.id !== cardId) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  displayTodoList();
+};
+
+const createListItem = (item) => {
   const newListItem = document.createElement("li");
   newListItem.className = "list-item";
-  newListItem.id = `card-${getUniqueId()}`;
-  newListItem.innerHTML = `<p class="item-text">${data}</p>
+  newListItem.id = item.id;
+  newListItem.style.backgroundColor = item.bgColor;
+  newListItem.innerHTML = `<p class="item-text">${item.content}</p>
         <div class="list-button-group">
         <div title="Change card color">
-                <input type="color" class="color-input" value="#fedd00" />
+                <input type="color" class="color-input" value="${item.bgColor}" />
                 </div>
             <div>
             <button class="btn edit-btn">Edit</button>
-                <button class="btn delete-btn">Delete</button>
+                <button class="btn delete-btn" onclick="deleteTodo('${item.id}')">Delete</button>
             </div>
         </div>
         `;
 
   listContainer.appendChild(newListItem);
   addListenerToColorInputs();
+};
+
+const displayTodoList = () => {
+  listContainer.innerHTML = "";
+
+  todoList.forEach((todo) => {
+    createListItem(todo);
+  });
+};
+
+const addTodo = (data) => {
+  const newTodo = {
+    content: data,
+    id: `card-${getUniqueId()}`,
+    bgColor: "#fedd00",
+  };
+
+  todoList.unshift(newTodo);
+  displayTodoList();
 };
