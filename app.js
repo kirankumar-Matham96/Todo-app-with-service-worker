@@ -17,6 +17,7 @@ addTodoBtn.addEventListener("click", () => {
   addTodo(newTodo);
   mainInput.value = "";
   mainInput.style.height = "40px";
+  mainInput.focus();
 });
 
 function getContrastColor(hex) {
@@ -71,7 +72,10 @@ document.addEventListener("input", function (event) {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => addListenerToColorInputs);
+document.addEventListener("DOMContentLoaded", () => {
+  mainInput.focus();
+  addListenerToColorInputs();
+});
 
 const getUniqueId = () => {
   return Date.now();
@@ -93,14 +97,22 @@ const createListItem = (item) => {
   newListItem.className = "list-item";
   newListItem.id = item.id;
   newListItem.style.backgroundColor = item.bgColor;
-  newListItem.innerHTML = `<p class="item-text">${item.content}</p>
+  newListItem.innerHTML = `<p class="item-text" style="color: ${getContrastColor(
+    item.bgColor
+  )}">${item.content}</p>
         <div class="list-button-group">
         <div title="Change card color">
-                <input type="color" class="color-input" value="${item.bgColor}" />
+                <input type="color" class="color-input" value="${
+                  item.bgColor
+                }" />
                 </div>
             <div>
-            <button class="btn edit-btn">Edit</button>
-                <button class="btn delete-btn" onclick="deleteTodo('${item.id}')">Delete</button>
+            <button class="btn edit-btn" onclick="showUpdateForm('${
+              item.id
+            }')">Edit</button>
+                <button class="btn delete-btn" onclick="deleteTodo('${
+                  item.id
+                }')">Delete</button>
             </div>
         </div>
         `;
@@ -127,3 +139,43 @@ const addTodo = (data) => {
   todoList.unshift(newTodo);
   displayTodoList();
 };
+
+const showUpdateForm = (cardId) => {
+  const cardEl = document.getElementById(cardId);
+
+  const item = todoList.find((todo) => todo.id === cardId);
+
+  cardEl.innerHTML = "";
+  cardEl.innerHTML = `<textarea class="item-text-input" style="color: ${getContrastColor(
+    item.bgColor
+  )}">${item.content}</textarea>
+        <div class="list-button-group">
+          <div title="Change card color">
+            <input type="color" class="color-input" value="${item.bgColor}"/>
+          </div>
+          <div>
+            <button class="btn edit-btn" onclick="updateTodo('${cardId}')">Update</button>
+          </div>
+        </div>
+        `;
+
+  const inputEl = cardEl.querySelector("textarea");
+  inputEl.focus();
+  inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+  inputEl.caretColor = getContrastColor(item.bgColor);
+};
+
+const updateTodo = (id) => {
+  const textEl = document.querySelector(`#${id}>textarea`);
+  const colorEl = document.querySelector(`#${id}>.list-button-group>div>input`);
+  const updatedText = textEl.value;
+  const bgColor = colorEl.value;
+  const index = todoList.findIndex((todo) => todo.id === id);
+  todoList[index].content = updatedText;
+  todoList[index].bgColor = bgColor;
+  displayTodoList();
+};
+
+// TODO: Add edit feature
+// TODO: Fetch data from an API and show in the list
+// TODO: Add service worker for the list items fetch
