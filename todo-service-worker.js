@@ -20,6 +20,7 @@ self.addEventListener("install", (event) => {
   );
 });
 
+// cache-first approach as data will not change from the API
 self.addEventListener("fetch", (e) => {
   e.respondWith(
     caches.match(e.request).then((response) => {

@@ -50,6 +50,7 @@ function changeCardColor(cardSelector, colorPicker) {
     itemFound.bgColor = colorPicker.value;
     cardText.style.color = getContrastColor(colorPicker.value);
     card.style.transition = "all 0.3s ease";
+    localStorage.setItem("todos", JSON.stringify(todoList));
   }
 }
 
@@ -83,7 +84,6 @@ document.addEventListener("input", function (event) {
 document.addEventListener("DOMContentLoaded", () => {
   mainInput.focus();
   fetchData();
-  // addListenerToColorInputs();
 });
 
 const getUniqueId = () => {
@@ -91,14 +91,10 @@ const getUniqueId = () => {
 };
 
 const deleteTodo = (cardId) => {
-  todoList = todoList.filter((todo) => {
-    if (todo.id !== cardId) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  displayTodoList();
+  todoList = todoList.filter((todo) => todo.id !== cardId);
+  localStorage.setItem("todos", JSON.stringify(todoList));
+  const cardElement = document.getElementById(cardId);
+  if (cardElement) cardElement.remove();
 };
 
 const createListItem = (item) => {
@@ -148,6 +144,7 @@ const addTodo = (data) => {
   };
 
   todoList.unshift(newTodo);
+  localStorage.setItem("todos", JSON.stringify(todoList));
   console.log("🚀 ~ addTodo ~ todoList:", todoList);
   displayTodoList();
 };
@@ -178,25 +175,43 @@ const showUpdateForm = (cardId) => {
 };
 
 const updateTodo = (id) => {
-  const textEl = document.querySelector(`#${id}>textarea`);
-  const colorEl = document.querySelector(`#${id}>.list-button-group>div>input`);
+  const cardEl = document.getElementById(id);
+  const textEl = cardEl.querySelector(`textarea`);
+  const colorEl = cardEl.querySelector(`.color-input`);
   const updatedText = textEl.value;
   const bgColor = colorEl.value;
   const index = todoList.findIndex((todo) => todo.id === id);
   todoList[index].title = updatedText;
   todoList[index].bgColor = bgColor;
+  localStorage.setItem("todos", JSON.stringify(todoList));
   displayTodoList();
 };
 
 const fetchData = async () => {
-  const resp = await fetch("https://jsonplaceholder.typicode.com/todos");
-  const data = await resp.json();
-  todoList = data.slice(0, 10);
-  todoList = todoList.map((todo) => {
-    todo.bgColor = "#fedd00";
-    todo.id = "card-" + todo.id;
-    return todo;
-  });
-  displayTodoList();
+  const cachedTodos = localStorage.getItem("todos");
+
+  if (cachedTodos) {
+    console.log("🚀 ~ fetchData ~ cachedTodos:", cachedTodos);
+    todoList = JSON.parse(cachedTodos);
+    displayTodoList();
+
+    return;
+  }
+
+  try {
+    const resp = await fetch("https://jsonplaceholder.typicode.com/todos");
+    const data = await resp.json();
+
+    todoList = data.slice(0, 10);
+    todoList = todoList.map((todo) => {
+      todo.bgColor = "#fedd00";
+      todo.id = "card-" + todo.id;
+      return todo;
+    });
+    localStorage.setItem("todos", JSON.stringify(todoList));
+    displayTodoList();
+  } catch (error) {
+    console.log(error);
+  }
 };
 // fetchData();
