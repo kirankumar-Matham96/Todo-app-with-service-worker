@@ -1,0 +1,9 @@
+{
+  "name": "Todo App",
+  "short_name": "todo",
+  "description": "A todo app that will get the todos from an API and displays. It has the crud features.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1d1d1d",
+  "is_mobile": "false"
+}

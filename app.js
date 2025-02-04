@@ -1,5 +1,12 @@
 "use strict";
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("./todo-service-worker.js")
+    .then(() => console.log("Service worker registered!"))
+    .catch((err) => console.error(`Failed to register service worker: ${err}`));
+}
+
 let todoList = [];
 
 const mainInput = document.querySelector("#input");
@@ -75,7 +82,8 @@ document.addEventListener("input", function (event) {
 
 document.addEventListener("DOMContentLoaded", () => {
   mainInput.focus();
-  addListenerToColorInputs();
+  fetchData();
+  // addListenerToColorInputs();
 });
 
 const getUniqueId = () => {
@@ -128,6 +136,7 @@ const displayTodoList = () => {
   todoList.forEach((todo) => {
     createListItem(todo);
   });
+  addListenerToColorInputs();
 };
 
 const addTodo = (data) => {
@@ -190,6 +199,4 @@ const fetchData = async () => {
   });
   displayTodoList();
 };
-fetchData();
-
-// TODO: Add service worker for the list items fetch
+// fetchData();
