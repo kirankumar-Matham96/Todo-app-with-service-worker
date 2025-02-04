@@ -1,9 +1,10 @@
 "use strict";
+
+let todoList = [];
+
 const mainInput = document.querySelector("#input");
 const addTodoBtn = document.querySelector("#add-todo-btn");
 const listContainer = document.querySelector(".list-container");
-
-let todoList = [];
 
 addTodoBtn.addEventListener("click", () => {
   const newTodo = mainInput.value;
@@ -99,7 +100,7 @@ const createListItem = (item) => {
   newListItem.style.backgroundColor = item.bgColor;
   newListItem.innerHTML = `<p class="item-text" style="color: ${getContrastColor(
     item.bgColor
-  )}">${item.content}</p>
+  )}">${item.title}</p>
         <div class="list-button-group">
         <div title="Change card color">
                 <input type="color" class="color-input" value="${
@@ -130,13 +131,15 @@ const displayTodoList = () => {
 };
 
 const addTodo = (data) => {
+  console.log("🚀 ~ addTodo ~ data:", data);
   const newTodo = {
-    content: data,
+    title: data,
     id: `card-${getUniqueId()}`,
     bgColor: "#fedd00",
   };
 
   todoList.unshift(newTodo);
+  console.log("🚀 ~ addTodo ~ todoList:", todoList);
   displayTodoList();
 };
 
@@ -148,7 +151,7 @@ const showUpdateForm = (cardId) => {
   cardEl.innerHTML = "";
   cardEl.innerHTML = `<textarea class="item-text-input" style="color: ${getContrastColor(
     item.bgColor
-  )}">${item.content}</textarea>
+  )}">${item.title}</textarea>
         <div class="list-button-group">
           <div title="Change card color">
             <input type="color" class="color-input" value="${item.bgColor}"/>
@@ -171,11 +174,22 @@ const updateTodo = (id) => {
   const updatedText = textEl.value;
   const bgColor = colorEl.value;
   const index = todoList.findIndex((todo) => todo.id === id);
-  todoList[index].content = updatedText;
+  todoList[index].title = updatedText;
   todoList[index].bgColor = bgColor;
   displayTodoList();
 };
 
-// TODO: Add edit feature
-// TODO: Fetch data from an API and show in the list
+const fetchData = async () => {
+  const resp = await fetch("https://jsonplaceholder.typicode.com/todos");
+  const data = await resp.json();
+  todoList = data.slice(0, 10);
+  todoList = todoList.map((todo) => {
+    todo.bgColor = "#fedd00";
+    todo.id = "card-" + todo.id;
+    return todo;
+  });
+  displayTodoList();
+};
+fetchData();
+
 // TODO: Add service worker for the list items fetch
