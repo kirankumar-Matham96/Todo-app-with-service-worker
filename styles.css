@@ -6,6 +6,8 @@
   --delete-btn: #b00;
   --card-bg: #fedd00;
   --btn-group-bg: #d1d1d1;
+  --closed: green;
+  --open: #fff;
 }
 * {
   margin: 0;
@@ -101,6 +103,8 @@
   color: var(--primary-text);
   font-size: 1.5rem;
   font-weight: 600;
+  max-height: 11rem;
+  overflow-y: auto;
 }
 .item-text-input {
   padding: 1rem;
@@ -133,9 +137,31 @@
 .color-input::-webkit-color-swatch-wrapper {
   padding: 0;
 }
-.edit-btn {
+.close-btn {
+  background-color: var(--open);
+}
+.edit-btn,
+.update-btn {
   background-color: var(--primary-blue);
 }
 .delete-btn {
   background-color: var(--delete-btn);
+}
+
+.close-btn,
+.edit-btn,
+.delete-btn {
+  padding: 0;
+  width: 1.8rem;
+  border-radius: 22rem;
+  background-color: transparent;
+}
+.btn > img {
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+
+.btn:hover > img {
+  transform: scale(1.5);
+  transition: all 0.2s ease-in-out;
 }

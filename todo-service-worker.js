@@ -4,6 +4,10 @@ const ASSETS_TO_CACHE = [
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./images/checkmark-circle-02-stroke-sharp.svg",
+  "./images/checkmark-circle-filled.png",
+  "./images/edit.png",
+  "./images/delete.png",
   "./manifest.json",
 ];
 
